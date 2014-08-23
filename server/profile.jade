@@ -1,0 +1,6 @@
+extends views/layout
+    
+block content
+    h3 This is the page for #{view.name}...
+        if user.twitter.user_id==view.twitter.user_id
+            a(href="/profile/edit") Edit Profile

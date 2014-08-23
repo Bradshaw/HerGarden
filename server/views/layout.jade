@@ -1,0 +1,10 @@
+doctype html
+html
+    head
+        title= title
+        link(rel='stylesheet', href='/stylesheets/style.css')
+    body
+        a(href="/") Home
+        if user
+            a(href="/users/logout") Log out...
+        block content
