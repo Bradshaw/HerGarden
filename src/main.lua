@@ -6,6 +6,8 @@ function love.load(arg)
 	require("player")
 	require("torch")
 	require("rock")
+	require("plant")
+	require("plantseed")
 
 	messageThread = love.thread.newThread("threadedMove.lua")
 

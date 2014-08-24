@@ -36,7 +36,15 @@ end
 function state:enter( pre )
 	txttime = 3
 	drawlist = {}
+	aSeed = nil
+	if p and p.carry then
+		if p.carry.plant then
+			aSeed = p.carry
+		end
+	end
 	player.all = {}
+	plant.all = {}
+	plantseed.all = {}
 	rock.all = {}
 	torch.all = {}
 	ts.batch:clear()
@@ -72,6 +80,9 @@ function state:enter( pre )
 			if v.item == "torch" then
 				torch.new(v.x, v.y, v.id)
 			end
+			if v.item == "plant" then
+				plant.new(v)
+			end
 		end
 		for i=2,#torch.all do
 			--torch.all[i].purge =true
@@ -104,6 +115,10 @@ function state:enter( pre )
 		love.event.push("quit")
 		return
 	end
+	if aSeed then
+		p.carry = plantseed.new(aSeed.plant)
+		p.carry.carried = true
+	end
 	p.dx = 0
 	p.dy = 0
 end
@@ -120,6 +135,8 @@ function state:update(dt)
 	rock.update(dt)
 	torch.update(dt)
 	portal.update(dt)
+	plant.update(dt)
+	plantseed.update(dt)
 end
 
 
@@ -274,23 +291,7 @@ function state:keypressed(key, isRepeat)
 		love.event.push('quit')
 	end
 	if key==" " then
-		if not p.carrying then
-			local ppdx = p.x-portal.x
-			local ppdy = p.y-portal.y
-			local ppd = math.sqrt(ppdx*ppdx+ppdy*ppdy)
-			if ppd<2 then
-				if mode == "visit" then
-					mode = "new"
-				else
-					mode = "visit"
-				end
-				gstate.switch(game)
-			else
-				p:pickup()
-			end
-		else
-			p:pickup()
-		end
+		p:pickup()
 	end
 end
 

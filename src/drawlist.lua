@@ -16,7 +16,6 @@ function drawthelist()
 			i = i+1
 		end
 	end
-
 end
 
 function addtolist(item)
@@ -24,5 +23,7 @@ function addtolist(item)
 end
 
 function dodraw(item)
-	item:draw()
+	if item.draw then
+		item:draw()
+	end
 end

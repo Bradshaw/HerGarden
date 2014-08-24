@@ -50,7 +50,7 @@ end
 function torch_mt:draw()
 	if self.carried then
 		love.graphics.setColor(255,255,255)
-		love.graphics.draw("torch",math.floor(self.x*10),math.floor(self.y*8)-15,0,1,1,2,12)
+		love.graphics.draw("torch",math.floor(self.x*10),math.floor(self.y*8)-12,0,1,1,2,12)
 	else
 		love.graphics.setColor(255,255,255,100)
 		love.graphics.draw("shadow",self.x*10-0.5,self.y*8-2,0,1.5,0.8,5,4)

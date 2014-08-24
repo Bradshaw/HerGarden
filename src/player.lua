@@ -5,6 +5,7 @@ player.cur = nil
 
 function player.new(x, y)
 	local self = setmetatable({}, {__index=player_mt})
+	self.wait = 1
 	self.r = math.random(125,225)
 	self.g = math.random(125,225)
 	self.b = math.random(125,225)
@@ -38,14 +39,15 @@ function player_mt:update( dt )
 	if love.keyboard.isDown("s", "down") then
 		self.dy = self.dy + self.acc * dt
 	end
-	self.dx = self.dx - self.dx * self.fric * dt
-	self.dy = self.dy - self.dy * self.fric * dt
+	self.dx = (self.dx - self.dx * self.fric * dt)*(1-self.wait)
+	self.dy = (self.dy - self.dy * self.fric * dt)*(1-self.wait)
 	self.x = self.x + self.dx*dt
 	self.y = self.y + self.dy*dt
 	if self.carry then
 		self.carry.x = self.x
 		self.carry.y = self.y
 	end
+	self.wait = math.max(0,math.min(1,self.wait-dt))
 end
 
 function player_mt:draw()

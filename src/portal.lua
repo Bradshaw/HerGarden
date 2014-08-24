@@ -20,4 +20,15 @@ function portal.draw()
 end
 
 function portal.update(dt)
+	local ppdx = p.x-portal.x
+	local ppdy = p.y-portal.y
+	local ppd = math.sqrt(ppdx*ppdx+ppdy*ppdy)
+	if ppd<0.5 then
+		if mode == "visit" then
+			mode = "new"
+		else
+			mode = "visit"
+		end
+		gstate.switch(game)
+	end
 end

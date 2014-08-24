@@ -48,10 +48,12 @@ module.exports = {
 };
 
 function placeItems(x, y) {
-    if (Math.random()>0.05){
+    if (Math.random()>0.1){
         return rock(x, y);
-    } else {
+    } else if (Math.random()>0.6) {
         return torch(x, y);
+    } else {
+        return plant(x, y);
     }
 }
 
@@ -63,7 +65,26 @@ function torch(x, y){
 }
 
 function plant(x, y){
-    
+    var self = {x: x, y: y, item: "plant",  id: guid()};
+    self.size = 0.5+Math.random()*2;
+    self.fully = (1+Math.random()*4)*Math.random()*Math.random();
+    self.length = 3+Math.random()*5;
+    self.ra = Math.random()*0.5;
+    self.ma = Math.random();
+    self.min = Math.random(0,1);
+    self.max = Math.random(self.min,3);
+    self.ls = Math.random();
+    self.brgb = {
+        r: 60*Math.random()*Math.random(),
+        g: 60*Math.random()*Math.random(),
+        b: 60*Math.random()*Math.random()
+    };
+    self.lrgb = {
+        r: 200*Math.random()*Math.random(),
+        g: 200*Math.random()*Math.random(),
+        b: 200*Math.random()*Math.random()
+    };
+    return self; 
 }
 
 function grass() {

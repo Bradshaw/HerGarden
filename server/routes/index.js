@@ -71,4 +71,20 @@ router.get('/visit/:notid', function(req, res){
     });
 });
 
+router.post('/plant/:wid', function(req, res) {
+    var wid = req.params.wid;
+    var body = req.body;
+    var plant = JSON.parse(body.json);
+    plant.id = guid();
+    plant.item = "plant";
+    var db = req.db;
+    var worlds = db.get("worlds");
+    worlds.findById(wid, function(err, doc) {
+        doc.items.movables.push(plant);
+        worlds.updateById(wid, doc,function(){
+            res.send("dune");
+        });
+    });
+});
+
 module.exports = router;
