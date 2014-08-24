@@ -1,5 +1,5 @@
-extern vec4 colors[32];
-extern float ditherAmt = 0.01;
+extern vec4 colors[16];
+extern float ditherAmt;
 extern float time;
 extern float rseed;
 extern Image pal;
@@ -8,7 +8,7 @@ extern float lightX = 0;
 extern float lightY = 0;
 
 
-float M_PI = 3.14159265;
+highp float M_PI = 3.14159265;
 
 float hue2rgb(float p, float q, float t){
     if(t < 0) t += 1.0;
@@ -130,9 +130,9 @@ float plasma(vec2 v_coords) {
 float jitterFunc(vec2 coord)
 {
     //return (sin(((coord.x-coord.y)*M_PI)/10.0)>0?1:-1)+rand(coord+rseed)-rand(coord+1);
-    //return (sin(((coord.x-coord.y)*M_PI)/2.0))+(rseed-0.5)*0.05;
+    return (sin(((coord.x-coord.y)*M_PI)/2.0))+(rseed-0.5)*0.05;
     //return (rseed-0.5)*0.05;
-    return rand(coord+rseed)-rand(coord+1000+rseed);
+    //return rand(coord+rseed)-rand(coord+1000+rseed);
     //return 0.001;
 }
 
@@ -142,7 +142,7 @@ int getClosest(vec4 c, vec2 coord){
     int res; // Result
     float mindist = 10000; // rbg values have a maximum distance of sqrt(3) so this should be big enough
     int i;
-    for (i = 0; i < 32; ++i)
+    for (i = 0; i < 16; ++i)
     {
         float dist = dist3(c, colors[i]);       // Use dist32() for better performance, but dodgy jittering
         if (dist<mindist+ditherAmt*jitterFunc(coord)) // dither and jitter work together to break nasty lines
@@ -156,9 +156,9 @@ int getClosest(vec4 c, vec2 coord){
 
 vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords )
 {
-    vec4 c = Texel(texture, texture_coords)*color; // Get the ACTUAL colour
-    //float distFromLight = dist2(vec2(lightX,(1-lightY)/1.5),vec2(texture_coords.x,texture_coords.y/1.5))*(lightmult);
-    //c *= ( 1 - distFromLight );
-    int i = getClosest(c, screen_coords); // Find the index of the closest colour
-    return /**c;//**/colors[i]; // Return said closest colour
+    vec4 c = Texel(texture, texture_coords); // Get the ACTUAL colour
+    float distFromLight = (dist2(vec2(lightX,200-lightY),vec2(screen_coords.x,screen_coords.y)))*(lightmult/400);
+    c *= ( 1 - distFromLight );
+    //int i = getClosest(c, screen_coords); // Find the index of the closest colour
+    return vec4(c.r,c.g,c.b,1)*color; // Return said closest colour
 }

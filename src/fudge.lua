@@ -299,6 +299,7 @@ function fudge.new(folder, options)
 		}
 		setmetatable(self.pieces[v.name], {__index=piece_mt})
 	end
+	print(options.batchSize)
 	self.batch = love.graphics.newSpriteBatch(self.image, (options and options.batchSize or nil))
 	self.canv = nil
 	self.images = nil

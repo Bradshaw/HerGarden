@@ -5,6 +5,7 @@ function drawthelist()
 		local v = drawlist[i]
 		if v.purge then
 			table.remove(drawlist,i)
+			print("prg")
 		else
 			dodraw(v)
 			if i>1 then

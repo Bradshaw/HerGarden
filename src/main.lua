@@ -3,10 +3,16 @@ function love.load(arg)
 	math.randomseed(os.time())
 	require("drawlist")
 	require("portal")
+	require("player")
+	require("torch")
 	require("rock")
+
+	messageThread = love.thread.newThread("threadedMove.lua")
+
 	fudge = require("fudge")
 	ts = fudge.new("tileset",{
-			npot = true
+			npot = true,
+			batchSize = 100000
 			})
 	fudge.set({
 		current = ts,
@@ -14,11 +20,24 @@ function love.load(arg)
 	})
 	ts.image:setFilter("nearest","nearest")
 	http = require("socket.http")
+	srv = require("httpSettings")
+	if (love.filesystem.exists("myWorld.lua")) then
+		require("myWorld")
+	else 
+		myID = http.request("http://"..srv.ip..":"..srv.port.."/new/")
+		love.filesystem.write("myWorld.lua", "myID = '"..myID.."'")
+	end
+	mode = "new"
 	scale = 2
 	sw = love.graphics.getWidth()/scale
 	sh = love.graphics.getHeight()/scale
 	scrcanv =love.graphics.newCanvas(love.graphics.getWidth(),love.graphics.getHeight())
+	rndcanv =love.graphics.newCanvas(sw,sh)
+	litcanv =love.graphics.newCanvas(sw,sh)
 	scrcanv:setFilter("nearest","nearest")
+	rndcanv:setFilter("nearest","nearest")
+	litcanv:setFilter("nearest","nearest")
+	lighten = love.graphics.newShader("shaders/lighten.fs")
 	pltshader = love.graphics.newShader("shaders/pallettise.fs")
 	cols = {}
 	table.insert(cols,pltshader)

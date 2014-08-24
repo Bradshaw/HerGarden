@@ -1,0 +1,5 @@
+local http = require("socket.http")
+--local srv = require("httpSettings")
+local channel = love.thread.getChannel("http")
+local msg = channel:demand()
+local lvl = http.request("http://192.168.1.29:3000/"..msg)
