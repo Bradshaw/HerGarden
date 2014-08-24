@@ -34,6 +34,7 @@ end
 
 
 function state:enter( pre )
+	txttime = 3
 	drawlist = {}
 	player.all = {}
 	rock.all = {}
@@ -113,6 +114,7 @@ end
 
 
 function state:update(dt)
+	txttime = math.max(0,txttime-dt)
 	--pltshader:send("rseed", 1+love.timer.getTime()%1)
 	player.update(dt)
 	rock.update(dt)
@@ -209,8 +211,28 @@ function state:draw()
 	--love.graphics.draw("portal_godray",portal.x*10,portal.y*8,0,1,1,15,90)
 	love.graphics.setBlendMode("alpha")
 	love.graphics.pop()
+			love.graphics.setShader()
+	if txttime>0 then
+		local fin = math.max(0,math.min(1,3-txttime))
+		fin= math.sqrt(fin)
+		local fout = math.max(0,math.min(1,txttime))
+		fout = math.sqrt(fout)
+		local a = fin*fout*255
+		love.graphics.setColor(255,255,255,a)
+		if myID==ldID then
+			love.graphics.draw("home_txt",sw/2-100, sh-90)
+		else
+			love.graphics.draw("away_txt",sw/2-100, sh-90)
+		end
+	else
+		if myID==ldID then
+			love.graphics.draw("home_txt",sw-55, sh-25,0,0.3,0.3)
+		else
+			love.graphics.draw("away_txt",sw-55, sh-25,0,0.3,0.3)
+		end
+	end
 
-
+	love.graphics.setColor(255,255,255)
 	love.graphics.setCanvas(scrcanv)
 	love.graphics.setShader(pltshader)
 	love.graphics.draw(litcanv)
@@ -236,7 +258,6 @@ function state:draw()
 
 	love.graphics.setCanvas()
 	love.graphics.setShader()
-	--love.graphics.draw(ts.image)
 end
 
 

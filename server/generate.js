@@ -62,6 +62,10 @@ function torch(x, y){
     return {x: x, y: y, item: "torch", id: guid()};
 }
 
+function plant(x, y){
+    
+}
+
 function grass() {
     return {tile: "g", "variant": "_0"+(Math.ceil(Math.random()*4))};
 }
